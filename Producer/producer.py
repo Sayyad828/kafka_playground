@@ -9,7 +9,8 @@ from fastapi import FastAPI
 app = FastAPI()
 kafka_bootstrap_servers: str = os.environ.get("KAFKA_BOOTSTRAP_SERVERS")
 kafka_topic: str = os.environ.get("KAFKA_TOPIC")
-superheros = ["Batman", "Spiderman", "Ironman", "Superman", "Aquaman"]
+kafka_topic2: str = os.environ.get("KAFKA_TOPIC2")
+superheros = ["Batman", "Spiderman", "Ironman", "Superman", "Aquaman", "Woderwoman", "Hulk"]
 
 
 def kafka_serializer(value):
@@ -36,5 +37,7 @@ async def root():
 @app.get("/start")
 async def start():
     sh = choice(superheros)
+    sh2 = choice(superheros)
     await produce(topic=kafka_topic, msg=sh)
-    return {"Superhero": sh}
+    await produce(topic=kafka_topic2, msg=sh2)
+    return {"Superhero1": sh, "Superhero2": sh2}

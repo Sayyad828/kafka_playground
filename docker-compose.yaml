@@ -39,6 +39,7 @@ services:
   kafka:
     image: obsidiandynamics/kafka
     container_name: kafka
+    hostname: kafka
     restart: "no"
     ports:
       - "2181:2181"
@@ -52,6 +53,8 @@ services:
       KAFKA_RESTART_ATTEMPTS: "10"
       KAFKA_RESTART_DELAY: "5"
       ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+    volumes:
+      - ./topics.sh:/usr/local/bin/create-topics.sh
     healthcheck:
       test: nc -z localhost 29092 || exit
       interval: 10s
@@ -62,3 +65,4 @@ services:
 
 networks:
   my-net:
+    external: false
